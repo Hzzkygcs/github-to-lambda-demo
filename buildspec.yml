@@ -4,12 +4,12 @@ phases:
     runtime-version:
       python: 3.11
     commands:
-      - echo "Preparing pipenv"
-      - pip install pipenv
-      - echo "Installing dependencies..."
-      - python3 -m pipenv install
-      - echo "Switching to pipenv shell..."
-      - pipenv shell
+      - echo "Export pipenv to requirements.txt"
+      - pip install --user pipenv
+      - echo $(pipenv --version)
+      - python3 -m pipenv requirements > requirements.txt
+      - echo "Installing Dependencies"
+      - pip install -r requirements.txt
   build:
     commands:
       - echo "Zipping deployment package..."
