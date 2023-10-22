@@ -1,0 +1,24 @@
+version: 0.2
+phases:
+  install:
+    runtime-version:
+      python: 3.11
+    commands:
+      - echo "Preparing pipenv"
+      - pip install pipenv
+      - echo "Installing dependencies..."
+      - python3 -m pipenv install
+      - echo "Switching to pipenv shell..."
+      - pipenv shell
+  build:
+    commands:
+      - echo "Zipping deployment package..."
+      - cd lib
+      - zip -r9 ../deployment_package.zip .
+      - cd ..
+      - zip -g deployment_package.zip lambda_function.py.py
+  post_build:
+    commands:
+      - echo "Updating lambda function..."
+      - aws lambda update-function-code --function-name github-to-lambda-demo --zip-file fileb://deployment_package.zip
+      - echo "Done!"
